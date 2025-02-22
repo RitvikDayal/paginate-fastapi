@@ -1,11 +1,12 @@
 import pytest
 
 from pagination import PaginationParams
+from tests.fixtures import delete_users, paginator, sample_users  # noqa: F401
 from tests.models.user import User
 
 
 @pytest.mark.asyncio
-async def test_basic_pagination(paginator, sample_users):
+async def test_basic_pagination(paginator, sample_users):  # noqa: F811
     """Test basic pagination without filters or sorting."""
     params = PaginationParams(page=1, page_size=2)
     result = await paginator.paginate(User, params)
@@ -20,7 +21,7 @@ async def test_basic_pagination(paginator, sample_users):
 
 
 @pytest.mark.asyncio
-async def test_pagination_last_page(paginator, sample_users):
+async def test_pagination_last_page(paginator, sample_users):  # noqa: F811
     """Test pagination on the last page."""
     params = PaginationParams(page=3, page_size=2)
     result = await paginator.paginate(User, params)
@@ -33,7 +34,7 @@ async def test_pagination_last_page(paginator, sample_users):
 
 
 @pytest.mark.asyncio
-async def test_pagination_invalid_page(paginator, sample_users):
+async def test_pagination_invalid_page(paginator, sample_users):  # noqa: F811
     """Test pagination with invalid page number."""
     params = PaginationParams(page=99, page_size=10)
     result = await paginator.paginate(User, params)
@@ -45,7 +46,7 @@ async def test_pagination_invalid_page(paginator, sample_users):
 
 
 @pytest.mark.asyncio
-async def test_pagination_empty_result(paginator, delete_users):
+async def test_pagination_empty_result(paginator, delete_users):  # noqa: F811
     """Test pagination with no data."""
     params = PaginationParams(page=1, page_size=10)
     result = await paginator.paginate(User, params)

@@ -1,11 +1,12 @@
 import pytest
 
 from pagination import FilterOperator, PaginationParams
+from tests.fixtures import paginator, sample_users  # noqa: F401
 from tests.models.user import User
 
 
 @pytest.mark.asyncio
-async def test_filter_equals(paginator, sample_users):
+async def test_filter_equals(paginator, sample_users):  # noqa: F811
     """Test filtering with equals operator."""
     params = PaginationParams(
         filter_field="age", filter_operator=FilterOperator.EQ, filter_value=30
@@ -17,7 +18,7 @@ async def test_filter_equals(paginator, sample_users):
 
 
 @pytest.mark.asyncio
-async def test_filter_greater_than(paginator, sample_users):
+async def test_filter_greater_than(paginator, sample_users):  # noqa: F811
     """Test filtering with greater than operator."""
     params = PaginationParams(
         filter_field="age", filter_operator=FilterOperator.GT, filter_value=30
@@ -28,7 +29,7 @@ async def test_filter_greater_than(paginator, sample_users):
 
 
 @pytest.mark.asyncio
-async def test_filter_like(paginator, sample_users):
+async def test_filter_like(paginator, sample_users):  # noqa: F811
     """Test filtering with LIKE operator."""
     params = PaginationParams(
         filter_field="name", filter_operator=FilterOperator.LIKE, filter_value="Brown"
@@ -42,7 +43,7 @@ async def test_filter_like(paginator, sample_users):
 
 
 @pytest.mark.asyncio
-async def test_filter_in(paginator, sample_users):
+async def test_filter_in(paginator, sample_users):  # noqa: F811
     """Test filtering with IN operator."""
     params = PaginationParams(
         filter_field="age", filter_operator=FilterOperator.IN, filter_value=[25, 30]
