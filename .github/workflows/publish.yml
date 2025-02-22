@@ -45,7 +45,7 @@ jobs:
       - name: Run tests
         run: |
           poetry run black --check .
-          poetry run ruff --ignore=PLR2004 check .
+          poetry run ruff check .
           poetry run pytest -v
 
   publish:
