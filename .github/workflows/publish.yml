@@ -23,7 +23,8 @@ jobs:
 
       - name: Install poetry
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
+          python -m pip install --upgrade pip
+          pip install poetry
           poetry --version
 
       - name: Configure poetry
@@ -60,22 +61,23 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.x"
+
       - name: Install poetry
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
+          python -m pip install --upgrade pip
+          pip install poetry
           poetry --version
-      - name: Configure poetry
-        run: |
-          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+
       - name: Install dependencies
-        run: |
-          poetry install --no-interaction --with dev
+        run: poetry install --no-interaction --with dev
+
       - name: Build package
-        run: |
-          poetry build
+        run: poetry build
+
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
