@@ -1,4 +1,4 @@
 from .pagination_fixtures import paginator
-from .user_fixtures import sample_users, delete_users
+from .user_fixtures import delete_users, sample_users
 
-__all__ = ["paginator", "sample_users", "delete_users"]
+__all__ = ["delete_users", "paginator", "sample_users"]

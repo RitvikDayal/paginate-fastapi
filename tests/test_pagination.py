@@ -1,6 +1,6 @@
 import pytest
-from pagination import PaginationMiddleware, PaginationParams
-from tests.fixtures import paginator, sample_users, delete_users
+
+from pagination import PaginationParams
 from tests.models.user import User
 
 
@@ -31,6 +31,7 @@ async def test_pagination_last_page(paginator, sample_users):
     assert result.has_next is False
     assert result.has_previous is True
 
+
 @pytest.mark.asyncio
 async def test_pagination_invalid_page(paginator, sample_users):
     """Test pagination with invalid page number."""
@@ -41,6 +42,7 @@ async def test_pagination_invalid_page(paginator, sample_users):
     assert result.total == 5
     assert result.has_next is False
     assert result.has_previous is True
+
 
 @pytest.mark.asyncio
 async def test_pagination_empty_result(paginator, delete_users):

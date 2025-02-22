@@ -11,36 +11,38 @@ The middleware can be used with any SQLModel-based FastAPI application
 to add pagination, filtering, and sorting capabilities.
 """
 
-from typing import Callable, Type, Optional, AsyncGenerator
+from collections.abc import AsyncGenerator, Callable
 from contextlib import asynccontextmanager
-from sqlmodel import SQLModel, select, func
-from sqlalchemy import desc, asc
+
+from sqlalchemy import asc, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import Select
-from .models import PaginationParams, PageResponse, FilterOperator, SortOrder
+from sqlmodel import SQLModel, func, select
+
+from .models import FilterOperator, PageResponse, PaginationParams, SortOrder
 
 
 class PaginationMiddleware:
     """
     Middleware for handling pagination in FastAPI applications.
-    
+
     This class provides methods to paginate SQLModel queries with
     support for filtering and sorting. It handles both async context
     managers and async generators for database sessions.
-    
+
     Attributes:
         session_maker: Callable that provides database sessions
         default_page_size: Default number of items per page
     """
 
     def __init__(
-        self, 
-        session_maker: Callable[[], AsyncSession | AsyncGenerator[AsyncSession, None]], 
-        default_page_size: int = 10
+        self,
+        session_maker: Callable[[], AsyncSession | AsyncGenerator[AsyncSession, None]],
+        default_page_size: int = 10,
     ):
         """
         Initialize the pagination middleware.
-        
+
         Args:
             session_maker: Function that returns a database session
             default_page_size: Default number of items per page
@@ -49,13 +51,13 @@ class PaginationMiddleware:
         self.default_page_size = default_page_size
 
     @asynccontextmanager
-    async def get_session(self):
+    async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         """
         Get a database session using the session maker.
-        
+
         This method handles both async context managers and async generators,
         making it compatible with FastAPI dependency injection.
-        
+
         Yields:
             AsyncSession: Database session
         """
@@ -74,15 +76,17 @@ class PaginationMiddleware:
                     if "already closed" not in str(ex):
                         raise ex
 
-    def _apply_filter(self, query: Select, model: Type[SQLModel], params: PaginationParams) -> Select:
+    def _apply_filter(
+        self, query: Select, model: type[SQLModel], params: PaginationParams
+    ) -> Select:
         """
         Apply filter conditions to the query.
-        
+
         Args:
             query: Base SQLAlchemy select query
             model: SQLModel class to query
             params: Pagination parameters containing filter settings
-        
+
         Returns:
             Select: Query with filters applied
         """
@@ -90,7 +94,7 @@ class PaginationMiddleware:
             return query
 
         field = getattr(model, params.filter_field)
-        
+
         filter_map = {
             FilterOperator.EQ: lambda f, v: f == v,
             FilterOperator.NEQ: lambda f, v: f != v,
@@ -107,15 +111,15 @@ class PaginationMiddleware:
         filter_func = filter_map[params.filter_operator]
         return query.where(filter_func(field, params.filter_value))
 
-    def _apply_sort(self, query: Select, model: Type[SQLModel], params: PaginationParams) -> Select:
+    def _apply_sort(self, query: Select, model: type[SQLModel], params: PaginationParams) -> Select:
         """
         Apply sorting to the query.
-        
+
         Args:
             query: Base SQLAlchemy select query
             model: SQLModel class to query
             params: Pagination parameters containing sort settings
-        
+
         Returns:
             Select: Query with sorting applied
         """
@@ -123,18 +127,14 @@ class PaginationMiddleware:
             return query
 
         field = getattr(model, params.sort_by)
-        return query.order_by(
-            desc(field) if params.sort_order == SortOrder.DESC else asc(field)
-        )
+        return query.order_by(desc(field) if params.sort_order == SortOrder.DESC else asc(field))
 
     async def paginate(
-        self, 
-        model: Type[SQLModel], 
-        params: Optional[PaginationParams] = None
+        self, model: type[SQLModel], params: PaginationParams | None = None
     ) -> PageResponse:
         """
         Paginate a SQLModel query with optional filtering and sorting.
-        
+
         This method handles the complete pagination process:
         1. Builds the base query
         2. Applies any filters
@@ -142,11 +142,11 @@ class PaginationMiddleware:
         4. Calculates total count
         5. Applies pagination
         6. Returns formatted response
-        
+
         Args:
             model: SQLModel class to paginate
             params: Pagination, filtering, and sorting parameters
-        
+
         Returns:
             PageResponse: Paginated results with metadata
         """
@@ -178,5 +178,5 @@ class PaginationMiddleware:
                 page_size=params.page_size,
                 pages=pages,
                 has_next=params.page < pages,
-                has_previous=params.page > 1
+                has_previous=params.page > 1,
             )

@@ -1,6 +1,7 @@
 import pytest
 from sqlalchemy import text
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 from tests.models.user import User
 
 
@@ -20,6 +21,7 @@ async def sample_users(session: AsyncSession):
     await session.commit()
 
     return users
+
 
 @pytest.fixture(scope="module")
 async def delete_users(session: AsyncSession):

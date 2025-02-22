@@ -1,5 +1,6 @@
 import pytest
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 from pagination.middleware import PaginationMiddleware
 
 

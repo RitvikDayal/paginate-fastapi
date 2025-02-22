@@ -6,27 +6,32 @@ It defines the parameters that can be used to control pagination behavior and th
 structure of pagination responses.
 """
 
+from collections.abc import Sequence
 from enum import Enum
-from typing import Generic, TypeVar, Sequence, Optional, Any
+from typing import Any, Generic, TypeVar
+
 from pydantic import BaseModel, ConfigDict, Field
 
 T = TypeVar("T")
 
+
 class SortOrder(str, Enum):
     """
     Enumeration for sort order direction.
-    
+
     Attributes:
         ASC: Ascending order (A to Z, 1 to 9)
         DESC: Descending order (Z to A, 9 to 1)
     """
+
     ASC = "asc"
     DESC = "desc"
+
 
 class FilterOperator(str, Enum):
     """
     Enumeration for filter operations.
-    
+
     Attributes:
         EQ: Equals (=)
         NEQ: Not equals (!=)
@@ -39,6 +44,7 @@ class FilterOperator(str, Enum):
         IN: Value in list
         NOT_IN: Value not in list
     """
+
     EQ = "eq"  # equals
     NEQ = "neq"  # not equals
     GT = "gt"  # greater than
@@ -50,13 +56,14 @@ class FilterOperator(str, Enum):
     IN = "in"  # IN operator
     NOT_IN = "not_in"  # NOT IN operator
 
+
 class PaginationParams(BaseModel):
     """
     Parameters for pagination, filtering, and sorting.
-    
+
     This model can be used directly as a FastAPI dependency to receive
     pagination parameters from query strings.
-    
+
     Attributes:
         page: Current page number (1-based)
         page_size: Number of items per page
@@ -66,13 +73,14 @@ class PaginationParams(BaseModel):
         filter_operator: Filter operation to apply
         filter_value: Value to filter by
     """
+
     page: int = Field(default=1, gt=0)
     page_size: int = Field(default=10, gt=0)
-    sort_by: Optional[str] = None
+    sort_by: str | None = None
     sort_order: SortOrder = SortOrder.ASC
-    filter_field: Optional[str] = None
-    filter_operator: Optional[FilterOperator] = None
-    filter_value: Optional[Any] = None
+    filter_field: str | None = None
+    filter_operator: FilterOperator | None = None
+    filter_value: Any | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -80,18 +88,19 @@ class PaginationParams(BaseModel):
     def offset(self) -> int:
         """
         Calculate the SQL offset for the current page.
-        
+
         Returns:
             int: Number of items to skip
         """
         return (self.page - 1) * self.page_size
 
+
 class PageResponse(BaseModel, Generic[T]):
     """
     Generic response model for paginated results.
-    
+
     Type parameter T represents the model type being paginated.
-    
+
     Attributes:
         items: Sequence of items for the current page
         total: Total number of items across all pages
@@ -101,6 +110,7 @@ class PageResponse(BaseModel, Generic[T]):
         has_next: Whether there is a next page
         has_previous: Whether there is a previous page
     """
+
     items: Sequence[T]
     total: int
     page: int
@@ -108,6 +118,5 @@ class PageResponse(BaseModel, Generic[T]):
     pages: int
     has_next: bool
     has_previous: bool
-    
-    model_config = ConfigDict(from_attributes=True)
 
+    model_config = ConfigDict(from_attributes=True)

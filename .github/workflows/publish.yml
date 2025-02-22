@@ -15,38 +15,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      
+
       - name: Install poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           poetry --version
-      
+
       - name: Configure poetry
         run: |
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
-      
+
       - name: Cache poetry virtualenv
         uses: actions/cache@v3
         id: cache
         with:
           path: ./.venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-      
+
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --with dev
-      
+
       - name: Run tests
         run: |
           poetry run black --check .
           poetry run ruff check .
-          poetry run mypy .
           poetry run pytest -v
 
   publish:
@@ -55,20 +54,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      
+
       - name: Install poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-      
+
       - name: Configure poetry
         run: |
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-      
+
       - name: Build and publish
         run: |
           poetry publish --build

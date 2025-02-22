@@ -1,6 +1,6 @@
 import pytest
-from pagination import PaginationParams, SortOrder, FilterOperator
-from tests.fixtures import paginator, sample_users
+
+from pagination import FilterOperator, PaginationParams, SortOrder
 from tests.models.user import User
 
 

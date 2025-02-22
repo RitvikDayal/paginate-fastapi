@@ -1,8 +1,7 @@
 import pytest
-from pagination import PaginationParams, FilterOperator
-from tests.models.user import User
-from tests.fixtures import paginator, sample_users
 
+from pagination import FilterOperator, PaginationParams
+from tests.models.user import User
 
 
 @pytest.mark.asyncio

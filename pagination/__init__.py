@@ -7,10 +7,10 @@ to FastAPI applications using SQLModel.
 Example:
     from fastapi import FastAPI, Depends
     from pagination import PaginationMiddleware, PaginationParams
-    
+
     app = FastAPI()
     paginator = PaginationMiddleware(get_session)
-    
+
     @app.get("/items/")
     async def get_items(
         pagination: PaginationParams = Depends(),
@@ -20,12 +20,12 @@ Example:
 """
 
 from .middleware import PaginationMiddleware
-from .models import PaginationParams, PageResponse, FilterOperator, SortOrder
+from .models import FilterOperator, PageResponse, PaginationParams, SortOrder
 
 __all__ = [
-    "PaginationMiddleware",
-    "PaginationParams", 
-    "PageResponse",
     "FilterOperator",
-    "SortOrder"
+    "PageResponse",
+    "PaginationMiddleware",
+    "PaginationParams",
+    "SortOrder",
 ]

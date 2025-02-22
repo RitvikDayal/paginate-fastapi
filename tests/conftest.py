@@ -1,8 +1,10 @@
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
+
 import pytest
-from sqlmodel.pool import StaticPool
-from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlmodel import SQLModel
+from sqlmodel.pool import StaticPool
+
 
 @pytest.fixture(scope="module")
 async def engine():

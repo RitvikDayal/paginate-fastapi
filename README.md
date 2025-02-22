@@ -133,26 +133,29 @@ git clone https://github.com/ritvikdayal/paginate-fastapi.git
 cd paginate-fastapi
 
 # Install dependencies
-poetry install
+poetry install --with dev
+
+# Setup pre-commit hooks (optional)
+make setup-hooks
 ```
 
 ### Running Tests
 
 ```bash
-poetry run pytest
+make test
 ```
 
 ### Code Quality
 
 ```bash
-# Format code
-poetry run black .
+# Run all code quality checks
+make pre-commit
 
-# Run linter
-poetry run ruff .
+# Format code only
+make format
 
-# Type checking
-poetry run mypy .
+# Run linters only
+make lint
 ```
 
 ## Contributing
@@ -168,4 +171,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-

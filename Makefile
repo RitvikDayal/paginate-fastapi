@@ -1,4 +1,10 @@
-.PHONY: format lint test clean build publish
+.PHONY: format lint test clean build publish install-dev setup-hooks
+
+install-dev:
+	poetry install --with dev
+
+setup-hooks:
+	poetry run pre-commit install
 
 format:
 	poetry run black pagination tests
@@ -6,7 +12,7 @@ format:
 
 lint:
 	poetry run black --check pagination tests
-	poetry run ruff pagination tests
+	poetry run ruff check pagination tests
 	poetry run mypy pagination tests
 
 test:
@@ -23,4 +29,7 @@ build: clean
 	poetry build
 
 publish: build
-	poetry publish 
+	poetry publish
+
+pre-commit:
+	poetry run pre-commit run --all-files
