@@ -52,22 +52,23 @@ jobs:
     needs: test
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
+    name: Publish release to PyPI
+    environment:
+      name: pypi
+      url: https://pypi.org/p/paginate-fastapi
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
-
-      - name: Install poetry
+          python-version: "3.x"
+      - name: Install dependencies
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-
-      - name: Configure poetry
+          poetry install --no-interaction --with dev
+      - name: Build package
         run: |
-          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-
-      - name: Build and publish
-        run: |
-          poetry publish --build
+          poetry build
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
