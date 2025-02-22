@@ -24,12 +24,30 @@ jobs:
       - name: Install poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
+          poetry --version
+      
+      - name: Configure poetry
+        run: |
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+      
+      - name: Cache poetry virtualenv
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: ./.venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
       
       - name: Install dependencies
-        run: poetry install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --with dev
       
       - name: Run tests
-        run: poetry run pytest
+        run: |
+          poetry run black --check .
+          poetry run ruff check .
+          poetry run mypy .
+          poetry run pytest -v
 
   publish:
     needs: test
