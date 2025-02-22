@@ -67,11 +67,10 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Install poetry
+      - name: Install Poetry
         run: |
-          python -m pip install --upgrade pip
-          pip install poetry
-          poetry --version
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo 'export PATH="$HOME/.local/bin:$PATH"' >> $GITHUB_ENV
 
       - name: Install dependencies
         run: poetry install --no-interaction --with dev
