@@ -39,8 +39,6 @@ class FilterOperator(str, Enum):
         LT: Less than (<)
         GTE: Greater than or equal (>=)
         LTE: Less than or equal (<=)
-        LIKE: SQL LIKE pattern matching
-        ILIKE: Case-insensitive LIKE pattern matching
         IN: Value in list
         NOT_IN: Value not in list
     """
@@ -51,8 +49,6 @@ class FilterOperator(str, Enum):
     LT = "lt"  # less than
     GTE = "gte"  # greater than or equal
     LTE = "lte"  # less than or equal
-    LIKE = "like"  # LIKE operator
-    ILIKE = "ilike"  # ILIKE operator
     IN = "in"  # IN operator
     NOT_IN = "not_in"  # NOT IN operator
 
@@ -74,13 +70,13 @@ class PaginationParams(BaseModel):
         filter_value: Value to filter by
     """
 
-    page: int = Field(default=1, gt=0)
-    page_size: int = Field(default=10, gt=0)
-    sort_by: str | None = None
-    sort_order: SortOrder = SortOrder.ASC
-    filter_field: str | None = None
-    filter_operator: FilterOperator | None = None
-    filter_value: Any | None = None
+    page: int = Field(default=1, gt=0, description="Page number")
+    page_size: int = Field(default=10, gt=0, le=100, description="Items per page")
+    sort_by: str | None = Field(default=None, description="Field to sort by")
+    sort_order: SortOrder = Field(default=SortOrder.ASC, description="Sort direction (asc/desc)")
+    filter_field: str | None = Field(default=None, description="Field to filter on")
+    filter_operator: FilterOperator | None = Field(default=None, description="Filter operator")
+    filter_value: Any | None = Field(default=None, description="Filter value")
 
     model_config = ConfigDict(from_attributes=True)
 
