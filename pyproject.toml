@@ -1,0 +1,80 @@
+[project]
+name = "paginate-fastapi"
+version = "0.1.0"
+description = "A simple and efficient pagination library for FastAPI applications"
+authors = [
+    {name = "Ritvik Dayal", email = "ritvikr1605@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+keywords = ["fastapi", "sqlmodel", "pagination", "async", "filtering", "sorting"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "fastapi>=0.100.0",
+    "sqlmodel>=0.0.8",
+    "pydantic>=2.0.0",
+]
+
+[tool.poetry]
+name = "paginate-fastapi"
+version = "0.1.0"
+description = "A simple and efficient pagination library for FastAPI applications"
+authors = ["Ritvik Dayal <ritvikr1605@gmail.com>"]
+packages = [
+    { include = "pagination" }
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.9.7,<0.10.0",
+    "black>=24.1.0",
+    "mypy>=1.8.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.27.0",
+    "aiosqlite>=0.20.0",
+    "fastapi[all]>=0.100.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/ritvikdayal/paginate-fastapi"
+Documentation = "https://github.com/ritvikdayal/paginate-fastapi#readme"
+Repository = "https://github.com/ritvikdayal/paginate-fastapi.git"
+Issues = "https://github.com/ritvikdayal/paginate-fastapi/issues"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = "test_*.py"
+
