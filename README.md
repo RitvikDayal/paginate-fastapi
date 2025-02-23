@@ -29,6 +29,21 @@ pip install paginate-fastapi
 
 ## Quick Start
 
+### Usage as decorator
+```python
+from pagination.decorator import paginate
+
+@router.get("/", response_model=PageResponse[YourModel])
+@paginate(YourModel, lambda: get_db)
+async def get_items(
+    db: AsyncSession = Depends(get_db),
+    pagination: PaginationParams = Depends()
+):
+    ...
+    return { 'extra_data': 'data' }
+```
+
+### Usage as middleware
 ```python
 from fastapi import FastAPI, Depends
 from sqlmodel import SQLModel, Field
