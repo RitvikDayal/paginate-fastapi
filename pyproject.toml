@@ -1,6 +1,6 @@
 [project]
 name = "paginate-fastapi"
-version = "0.1.0"
+version = "1.0.2"
 description = "A simple and efficient pagination library for FastAPI applications"
 authors = [
     {name = "Ritvik Dayal", email = "ritvikr1605@gmail.com"}
