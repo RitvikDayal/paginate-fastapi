@@ -131,7 +131,7 @@ async def test_pagination_with_search(client: AsyncClient, sample_users):  # noq
     params = {
         "filter_field": "age",
         "filter_operator": FilterOperator.GT.value,
-        "filter_value": "30",  # Add SQL LIKE wildcards
+        "filter_value": "30",
         "page": 1,
         "page_size": 10,
     }

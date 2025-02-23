@@ -102,8 +102,6 @@ class PaginationMiddleware:
             FilterOperator.LT: lambda f, v: f < v,
             FilterOperator.GTE: lambda f, v: f >= v,
             FilterOperator.LTE: lambda f, v: f <= v,
-            FilterOperator.LIKE: lambda f, v: f.like(f"%{v}%"),
-            FilterOperator.ILIKE: lambda f, v: f.ilike(f"%{v}%"),
             FilterOperator.IN: lambda f, v: f.in_(v),
             FilterOperator.NOT_IN: lambda f, v: ~f.in_(v),
         }
